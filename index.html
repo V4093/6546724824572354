@@ -1442,16 +1442,41 @@ function compare(g, a) {
 // ---------- Shared bits ----------
 const $ = id => document.getElementById(id);
 const byName = n => CHARACTERS.find(c => c.name === n);
+// Pictures: look up each character's infobox image on the One Piece wiki the first time it's shown, then remember it.
+const WIKI_API = "https://onepiece.fandom.com/api.php";
+const wikiTitle = n => n.replace(/\s*\(.*\)/, "").trim();
+const imgCache = store.get("wt-op3-img", {});
+const imgPending = {};
+function wikiImage(name) {
+  if (imgCache[name]) return Promise.resolve(imgCache[name]);
+  if (imgPending[name]) return imgPending[name];
+  const title = wikiTitle(name);
+  const url = WIKI_API + "?action=query&format=json&origin=*&redirects=1&generator=images&gimlimit=max" +
+    "&prop=imageinfo&iiprop=url&iiurlwidth=120&titles=" + encodeURIComponent(title);
+  const first = title.split(" ")[0].toLowerCase();
+  const score = t => { t = t.toLowerCase(); return (t.includes(first) ? 8 : 0) + (/post.?timeskip/.test(t) ? 2 : 0) + (t.includes("anime") ? 1 : 0); };
+  imgPending[name] = fetch(url).then(r => r.json()).then(d => {
+    const files = Object.values((d.query && d.query.pages) || {}).filter(p => p.imageinfo && /infobox/i.test(p.title));
+    files.sort((a, b) => score(b.title) - score(a.title));
+    const src = files.length ? (files[0].imageinfo[0].thumburl || files[0].imageinfo[0].url) : "";
+    if (src) { imgCache[name] = src; store.set("wt-op3-img", imgCache); }
+    return src;
+  }).catch(() => "").finally(() => { delete imgPending[name]; });
+  return imgPending[name];
+}
 function portrait(c) {
   const box = document.createElement("span");
   box.className = "pic";
   const initials = c.name.replace(/\(.*\)/, "").replace(/ D\./, "").trim().split(/\s+/).map(w => w[0]).slice(0, 2).join("");
-  if (c.img) {
+  box.textContent = initials;
+  const show = src => {
+    if (!src) return;
     const img = document.createElement("img");
-    img.alt = ""; img.src = c.img; img.loading = "lazy";
+    img.alt = ""; img.src = src; img.loading = "lazy"; img.referrerPolicy = "no-referrer";
     img.onerror = () => { box.textContent = initials; };
-    box.appendChild(img);
-  } else box.textContent = initials;
+    box.textContent = ""; box.appendChild(img);
+  };
+  if (c.img) show(c.img); else wikiImage(c.name).then(show);
   return box;
 }
 
