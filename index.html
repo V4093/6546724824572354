@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Who's That? One Piece</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@500;700&display=swap">
+<style>
+/* Layout: a wanted poster nailed to a port-town notice board. Wooden planks fill the page; one paper poster holds every page, with a paper-tab nav pinned above it. Single committed look. */
+:root {
+  --wood-1: #8a5a32;
+  --wood-2: #9b6a3d;
+  --wood-3: #7a4c28;
+  --wood-dark: #3b2312;
+  --paper: #f1e3c2;
+  --paper-edge: #d9c290;
+  --paper-hi: #fffaf0;
+  --ink: #2b1d10;
+  --ink-soft: #6b5338;
+  --hit: #3f9a5c;
+  --near: #d9a227;
+  --miss: #b8443a;
+  --font-display: "Rye", "Rockwell", Georgia, serif;
+  --font-body: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --font-data: "Barlow Condensed", "Arial Narrow", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background-color: var(--wood-1); }
+body {
+  margin: 0; min-height: 100vh; color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-inline: 12px; padding-block: 18px 56px;
+  background-color: var(--wood-1);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.28) 0 3px, transparent 3px 170px),
+    repeating-linear-gradient(90deg, var(--wood-1) 0 56px, var(--wood-2) 56px 112px, var(--wood-3) 112px 170px);
+}
+.wrap { max-width: 660px; margin: 0 auto; display: grid; gap: 14px; }
+
+nav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+nav a {
+  font-family: var(--font-data); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .9rem;
+  color: var(--ink); text-decoration: none; background: var(--paper); border: 2px solid var(--paper-edge);
+  padding: 5px 11px; border-radius: 2px; box-shadow: 0 3px 8px rgba(0,0,0,.35); transform: rotate(-1deg);
+}
+nav a:nth-child(even) { transform: rotate(1.2deg); }
+nav a[aria-current="page"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+nav a:focus-visible, button:focus-visible, input:focus-visible, .card:focus-visible { outline: 3px solid var(--near); outline-offset: 2px; }
+
+.poster {
+  position: relative; background: var(--paper); border: 3px solid var(--paper-edge); border-radius: 3px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.5), inset 0 0 70px rgba(120,80,30,.2);
+  padding: 26px 12px 26px; display: grid; gap: 18px;
+}
+.poster::before, .poster::after {
+  content: ""; position: absolute; top: 10px; width: 12px; height: 12px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c9c9c9, #5d5d5d 60%, #2a2a2a); box-shadow: 0 2px 2px rgba(0,0,0,.4);
+}
+.poster::before { left: 12px; } .poster::after { right: 12px; }
+
+header.top { text-align: center; display: grid; gap: 4px; }
+.sub { font-family: var(--font-data); text-transform: uppercase; letter-spacing: .18em; font-size: .85rem; color: var(--ink-soft); }
+.wanted { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.3rem, 11vw, 3.5rem); line-height: 1; letter-spacing: .04em; margin: 0; }
+h2.title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.7rem, 7vw, 2.3rem); margin: 0; text-align: center; line-height: 1.1; }
+.rule { border: 0; border-top: 2px solid var(--ink); margin: 0; opacity: .8; }
+.meta { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; font-family: var(--font-data); font-size: 1rem; }
+.meta b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.prose { max-width: 60ch; margin: 0 auto; padding-inline: 6px; display: grid; gap: 12px; }
+.prose p, .prose ul { margin: 0; }
+.prose ul { padding-left: 20px; display: grid; gap: 6px; }
+.prose h3 { font-family: var(--font-data); text-transform: uppercase; letter-spacing: .08em; font-size: 1rem; margin: 8px 0 0; }
+.center { text-align: center; }
+.muted { color: var(--ink-soft); }
+.notice { border: 2px dashed var(--ink-soft); padding: 12px 14px; font-size: .95rem; }
+
+button, .btn {
+  display: inline-block; font-family: var(--font-data); font-weight: 700; font-size: 1.05rem; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--ink); color: var(--paper); border: 2px solid var(--ink); border-radius: 3px; padding: 10px 16px; cursor: pointer; text-decoration: none;
+}
+button:hover, .btn:hover { background: #45301b; }
+.btn.big { font-size: 1.3rem; padding: 14px 26px; }
+.btn.ghost, button.ghost { background: transparent; color: var(--ink); }
+button.small { font-size: .9rem; padding: 6px 12px; }
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+/* Home */
+.hero { text-align: center; display: grid; gap: 14px; justify-items: center; }
+.hero p { margin: 0; max-width: 40ch; }
+.tiles-demo { display: flex; gap: 5px; justify-content: center; }
+.tiles-demo span { width: 30px; height: 30px; border-radius: 3px; border: 2px solid rgba(0,0,0,.22); }
+.today-status { font-family: var(--font-data); font-size: 1.05rem; }
+
+/* Game */
+.search { position: relative; padding-inline: 4px; }
+.search label { display: block; font-family: var(--font-data); font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: .85rem; margin-bottom: 6px; }
+.search-row { display: flex; gap: 8px; }
+#guess { flex: 1; min-width: 0; font: inherit; font-size: 1.05rem; padding: 12px; border: 2px solid var(--ink); border-radius: 3px; background: var(--paper-hi); color: var(--ink); }
+#suggest { list-style: none; margin: 4px 0 0; padding: 0; position: absolute; left: 4px; right: 4px; z-index: 5; background: var(--paper-hi); border: 2px solid var(--ink); border-radius: 3px; max-height: 300px; overflow-y: auto; }
+#suggest li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; cursor: pointer; border-bottom: 1px solid var(--paper-edge); }
+#suggest li:last-child { border-bottom: 0; }
+#suggest li:hover, #suggest li.active { background: var(--paper); }
+.left { font-family: var(--font-data); font-size: .95rem; color: var(--ink-soft); margin-top: 6px; }
+.pic { width: 34px; height: 34px; border-radius: 50%; flex: none; overflow: hidden; display: grid; place-items: center; background: var(--ink); color: var(--paper); font-family: var(--font-data); font-weight: 700; font-size: .85rem; border: 2px solid var(--ink); }
+.pic img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.board-wrap { overflow-x: auto; }
+.board { display: grid; gap: 10px; min-width: 340px; }
+.cols { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.head div { font-family: var(--font-data); font-weight: 700; text-transform: uppercase; font-size: .66rem; letter-spacing: .05em; text-align: center; color: var(--ink-soft); }
+.guess { display: grid; gap: 4px; }
+.who { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: .95rem; padding: 0 2px; }
+.who.correct { color: var(--hit); }
+.tile { min-height: 54px; border-radius: 3px; display: grid; place-items: center; align-content: center; text-align: center; font-family: var(--font-data); font-weight: 700; font-size: .78rem; line-height: 1.05; color: #fff; padding: 4px 2px; border: 2px solid rgba(0,0,0,.22); overflow-wrap: anywhere; animation: flip .35s ease both; }
+.tile .arrow { font-size: 1rem; line-height: 1; margin-top: 2px; }
+.g { background: var(--hit); } .y { background: var(--near); color: var(--ink); } .r { background: var(--miss); }
+.cols .tile:nth-child(2) { animation-delay: .05s } .cols .tile:nth-child(3) { animation-delay: .1s } .cols .tile:nth-child(4) { animation-delay: .15s }
+.cols .tile:nth-child(5) { animation-delay: .2s } .cols .tile:nth-child(6) { animation-delay: .25s } .cols .tile:nth-child(7) { animation-delay: .3s }
+@keyframes flip { from { transform: rotateX(80deg); opacity: .3 } to { transform: none; opacity: 1 } }
+.empty { text-align: center; color: var(--ink-soft); font-style: italic; padding: 10px 0; }
+.result { border: 2px dashed var(--ink); padding: 16px; text-align: center; display: grid; gap: 10px; justify-items: center; }
+.result h3 { font-family: var(--font-display); font-weight: 400; margin: 0; font-size: 1.6rem; }
+.result p { margin: 0; }
+.result .pic { width: 64px; height: 64px; font-size: 1.3rem; }
+.grid-preview { font-size: 1rem; line-height: 1.25; white-space: pre; }
+.toast { font-family: var(--font-data); color: var(--hit); min-height: 1.2em; }
+.testbar { border: 2px dashed var(--near); background: #fbeecb; padding: 10px 12px; display: grid; gap: 8px; font-size: .95rem; }
+.testbar .answer { font-weight: 700; color: var(--miss); }
+.banner { background: var(--ink); color: var(--paper); padding: 8px 12px; font-size: .92rem; text-align: center; border-radius: 2px; }
+
+/* Archive */
+.archive-filters { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.archive-filters button { background: transparent; color: var(--ink); font-size: .9rem; padding: 5px 12px; }
+.archive-filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.card { display: grid; gap: 2px; padding: 10px 12px; border: 2px solid var(--ink); border-radius: 3px; background: var(--paper-hi); color: var(--ink); text-decoration: none; font-family: var(--font-data); }
+.card:hover { background: #fff; }
+.card .num { font-family: var(--font-display); font-size: 1.3rem; }
+.card .date { color: var(--ink-soft); font-size: .9rem; }
+.card .st { font-weight: 700; font-size: .95rem; }
+.st.won { color: var(--hit); } .st.lost { color: var(--miss); } .st.open { color: var(--ink-soft); }
+
+/* Stats */
+.stat-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; text-align: center; }
+.stat-row div { display: grid; }
+.stat-row b { font-family: var(--font-display); font-weight: 400; font-size: 1.8rem; font-variant-numeric: tabular-nums; }
+.stat-row span { font-family: var(--font-data); text-transform: uppercase; font-size: .75rem; letter-spacing: .06em; color: var(--ink-soft); }
+.dist { display: grid; gap: 4px; max-width: 420px; margin: 0 auto; width: 100%; }
+.dist-row { display: grid; grid-template-columns: 18px 1fr; gap: 6px; align-items: center; font-family: var(--font-data); font-weight: 700; }
+.dist-bar { background: var(--ink-soft); color: var(--paper); text-align: right; padding: 1px 6px; min-width: 22px; border-radius: 2px; font-variant-numeric: tabular-nums; }
+.dist-bar.best { background: var(--hit); }
+.key { display: inline-block; width: 14px; height: 14px; border-radius: 2px; vertical-align: -2px; margin-right: 4px; }
+footer.note { font-size: .82rem; color: var(--ink-soft); text-align: center; margin: 0; }
+[data-view] { display: grid; gap: 18px; }
+@media (prefers-reduced-motion: reduce) { .tile { animation: none; } }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <nav aria-label="Pages">
+    <a href="#home" data-nav="home">Home</a>
+    <a href="#play" data-nav="play">Play</a>
+    <a href="#how" data-nav="how">How to play</a>
+    <a href="#archive" data-nav="archive">Archive</a>
+  </nav>
+
+  <main class="poster">
+    <header class="top">
+      <div class="sub">One Piece daily character</div>
+      <h1 class="wanted">WHO'S THAT?</h1>
+      <div class="meta"><span>Puzzle <b id="todayNo">#1</b></span><span>Streak <b id="streak">0</b></span><span>Next in <b id="countdown">--:--:--</b></span></div>
+    </header>
+    <hr class="rule">
+
+    <!-- Home -->
+    <section data-view="home" class="hero">
+      <h2 class="title">Guess today's One Piece character</h2>
+      <p>A new mystery character every day. Eight guesses. The same puzzle for everyone in the crew.</p>
+      <div class="tiles-demo" aria-hidden="true"><span class="r"></span><span class="y"></span><span class="g"></span><span class="y"></span><span class="g"></span><span class="r"></span><span class="g"></span></div>
+      <a class="btn big" href="#play">Play today's puzzle</a>
+      <div class="today-status" id="homeStatus"></div>
+      <p class="muted">Missed a day? <a href="#archive">Play the archive</a>. New here? <a href="#how">How to play</a>.</p>
+    </section>
+
+    <!-- Game (daily, archive or test) -->
+    <section data-view="game">
+      <h2 class="title" id="gameTitle">Puzzle #1</h2>
+      <div class="banner" id="gameBanner" hidden></div>
+      <section class="search" id="searchBox">
+        <label for="guess">Guess a character</label>
+        <div class="search-row">
+          <input id="guess" type="text" autocomplete="off" placeholder="Start typing, e.g. Zoro">
+          <button id="go" type="button">Guess</button>
+        </div>
+        <ul id="suggest" hidden></ul>
+        <div class="left" id="left">8 guesses left</div>
+      </section>
+      <section id="result" class="result" hidden></section>
+      <div class="board-wrap">
+        <div class="board" id="board">
+          <div class="cols head"><div>Gender</div><div>Height</div><div>Haki</div><div>Fruit</div><div>Bounty</div><div>Affil.</div><div>First arc</div></div>
+          <div class="empty" id="empty">Your guesses appear here.</div>
+        </div>
+      </div>
+      <p class="center muted" style="margin:0"><a href="#how">How to play</a></p>
+    </section>
+
+    <!-- How to play -->
+    <section data-view="how">
+      <h2 class="title">How to play</h2>
+      <div class="prose">
+        <p>Guess today's hidden One Piece character in 8 tries. Characters go up to the Elbaf arc.</p>
+        <ul>
+          <li><b>Pick a character.</b> Start typing a name and choose from the list.</li>
+          <li><b>Read the tiles.</b> Each guess shows seven clues comparing your character with the hidden one.</li>
+          <li><b>Narrow it down</b> and solve it in 8 guesses to keep your streak.</li>
+          <li><b>Share your grid</b> in the group chat. It shows how you did without giving the answer away.</li>
+        </ul>
+        <h3>Colours</h3>
+        <ul>
+          <li><span class="key g"></span>Green: exact match.</li>
+          <li><span class="key y"></span>Yellow: close.</li>
+          <li><span class="key r"></span>Red: no match.</li>
+          <li>↑ means the hidden character is taller, has a higher bounty or first appeared later. ↓ means the opposite.</li>
+        </ul>
+        <h3>The seven clues</h3>
+        <ul>
+          <li><b>Gender:</b> green if the same.</li>
+          <li><b>Height:</b> green if exact, yellow if within 15 cm, with arrows.</li>
+          <li><b>Haki:</b> O = Observation, A = Armament, C = Conqueror's. Green if exactly the same, yellow if at least one in common.</li>
+          <li><b>Fruit:</b> Paramecia, Zoan, Logia or None. Green if the same, yellow if both have a Devil Fruit of different types. Blackbeard counts as both Logia and Paramecia.</li>
+          <li><b>Bounty:</b> green if exact, red otherwise, with arrows. "Unknown" counts as 0, so Unknown against None shows yellow.</li>
+          <li><b>Affiliation:</b> Pirate, Gov't, Both or Other. Yellow if one is "Both" and the other is Pirate or Gov't.</li>
+          <li><b>First arc:</b> green if the same arc, yellow if a different arc in the same saga, with arrows.</li>
+        </ul>
+        <p class="muted">One puzzle a day, the same for everyone, resetting at midnight on your device.</p>
+        <div class="notice"><b>About the facts.</b> Some details, such as certain heights, bounties and Haki, are estimates based on story information because they haven't been officially confirmed. Marine bounties are fan estimates based on rank and fame. If you spot something wrong, say so and it'll be fixed.</div>
+      </div>
+    </section>
+
+    <!-- Archive -->
+    <section data-view="archive">
+      <h2 class="title">Archive</h2>
+      <p class="center muted" style="margin:0">Missed a day, or want another go? Archive games don't affect your streak.</p>
+      <div class="archive-filters" role="group" aria-label="Filter puzzles">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="open" aria-pressed="false">Not played</button>
+        <button type="button" data-filter="won" aria-pressed="false">Solved</button>
+        <button type="button" data-filter="lost" aria-pressed="false">Missed</button>
+      </div>
+      <div class="cards" id="cards"></div>
+      <p class="center muted" id="archiveEmpty" hidden>No puzzles match this filter.</p>
+    </section>
+
+
+  </main>
+  <footer class="note" style="color:#f1e3c2">Who's That? · a fan-made One Piece guessing game</footer>
+</div>
+
+<script>
+const ARCS = [
+  ["Romance Dawn","East Blue"],["Orange Town","East Blue"],["Syrup Village","East Blue"],["Baratie","East Blue"],["Arlong Park","East Blue"],["Loguetown","East Blue"],
+  ["Reverse Mountain","Alabasta"],["Whisky Peak","Alabasta"],["Little Garden","Alabasta"],["Drum Island","Alabasta"],["Alabasta","Alabasta"],
+  ["Jaya","Sky Island"],["Skypiea","Sky Island"],
+  ["Long Ring Long Land","Water 7"],["Water 7","Water 7"],["Enies Lobby","Water 7"],["Post-Enies Lobby","Water 7"],
+  ["Thriller Bark","Thriller Bark"],
+  ["Sabaody","Summit War"],["Amazon Lily","Summit War"],["Impel Down","Summit War"],["Marineford","Summit War"],["Post-War","Summit War"],
+  ["Return to Sabaody","Fish-Man Island"],["Fish-Man Island","Fish-Man Island"],
+  ["Punk Hazard","Dressrosa"],["Dressrosa","Dressrosa"],
+  ["Zou","Four Emperors"],["Whole Cake Island","Four Emperors"],["Levely","Four Emperors"],["Wano","Four Emperors"],
+  ["Egghead","Final"],["Elbaf","Final"],
+];
+const arcIndex = name => ARCS.findIndex(a => a[0] === name);
+
+// Built from characters.csv. bounty: a number, 0 (none) or "Unknown". img: wiki picture URL, blank until filled in.
+const CHARACTERS = [
+  {
+  "name": "Monkey D. Luffy",
+  "gender": "Male",
+  "height": 174,
+  "haki": "OAC",
+  "fruit": "Zoan",
+  "bounty": 3000000000,
+  "affil": "Pirate",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Roronoa Zoro",
+  "gender": "Male",
+  "height": 181,
+  "haki": "OAC",
+  "fruit": "None",
+  "bounty": 1111000000,
+  "affil": "Pirate",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Nami",
+  "gender": "Female",
+  "height": 170,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 366000000,
+  "affil": "Pirate",
+  "arc": "Orange Town",
+  "img": ""
+  },
+  {
+  "name": "Usopp",
+  "gender": "Male",
+  "height": 174,
+  "haki": "O",
+  "fruit": "None",
+  "bounty": 500000000,
+  "affil": "Pirate",
+  "arc": "Syrup Village",
+  "img": ""
+  },
+  {
+  "name": "Sanji",
+  "gender": "Male",
+  "height": 180,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 1032000000,
+  "affil": "Pirate",
+  "arc": "Baratie",
+  "img": ""
+  },
+  {
+  "name": "Tony Tony Chopper",
+  "gender": "Male",
+  "height": 90,
+  "haki": "",
+  "fruit": "Zoan",
+  "bounty": 1000,
+  "affil": "Pirate",
+  "arc": "Drum Island",
+  "img": ""
+  },
+  {
+  "name": "Nico Robin",
+  "gender": "Female",
+  "height": 188,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 930000000,
+  "affil": "Pirate",
+  "arc": "Whisky Peak",
+  "img": ""
+  },
+  {
+  "name": "Franky",
+  "gender": "Male",
+  "height": 240,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 394000000,
+  "affil": "Pirate",
+  "arc": "Water 7",
+  "img": ""
+  },
+  {
+  "name": "Brook",
+  "gender": "Male",
+  "height": 277,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 383000000,
+  "affil": "Pirate",
+  "arc": "Thriller Bark",
+  "img": ""
+  },
+  {
+  "name": "Jinbe",
+  "gender": "Male",
+  "height": 301,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 1100000000,
+  "affil": "Pirate",
+  "arc": "Impel Down",
+  "img": ""
+  },
+  {
+  "name": "Shanks",
+  "gender": "Male",
+  "height": 199,
+  "haki": "OAC",
+  "fruit": "None",
+  "bounty": 4048900000,
+  "affil": "Pirate",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Charlotte Linlin (Big Mom)",
+  "gender": "Female",
+  "height": 880,
+  "haki": "OAC",
+  "fruit": "Paramecia",
+  "bounty": 4388000000,
+  "affil": "Pirate",
+  "arc": "Fish-Man Island",
+  "img": ""
+  },
+  {
+  "name": "Kaido",
+  "gender": "Male",
+  "height": 710,
+  "haki": "OAC",
+  "fruit": "Zoan",
+  "bounty": 4611100000,
+  "affil": "Pirate",
+  "arc": "Dressrosa",
+  "img": ""
+  },
+  {
+  "name": "Edward Newgate (Whitebeard)",
+  "gender": "Male",
+  "height": 666,
+  "haki": "OAC",
+  "fruit": "Paramecia",
+  "bounty": 5046000000,
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Marshall D. Teach (Blackbeard)",
+  "gender": "Male",
+  "height": 344,
+  "haki": "OA",
+  "fruit": "Logia+Paramecia",
+  "bounty": 3996000000,
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Buggy",
+  "gender": "Male",
+  "height": 192,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 3189000000,
+  "affil": "Pirate",
+  "arc": "Orange Town",
+  "img": ""
+  },
+  {
+  "name": "Benn Beckman",
+  "gender": "Male",
+  "height": 206,
+  "haki": "A",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Lucky Roux",
+  "gender": "Male",
+  "height": 241,
+  "haki": "A",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Yasopp",
+  "gender": "Male",
+  "height": 183,
+  "haki": "O",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Charlotte Katakuri",
+  "gender": "Male",
+  "height": 509,
+  "haki": "OAC",
+  "fruit": "Paramecia",
+  "bounty": 1057000000,
+  "affil": "Pirate",
+  "arc": "Whole Cake Island",
+  "img": ""
+  },
+  {
+  "name": "Charlotte Smoothie",
+  "gender": "Female",
+  "height": 463,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": 932000000,
+  "affil": "Pirate",
+  "arc": "Whole Cake Island",
+  "img": ""
+  },
+  {
+  "name": "Charlotte Cracker",
+  "gender": "Male",
+  "height": 307,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": 860000000,
+  "affil": "Pirate",
+  "arc": "Whole Cake Island",
+  "img": ""
+  },
+  {
+  "name": "King",
+  "gender": "Male",
+  "height": 610,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 1390000000,
+  "affil": "Pirate",
+  "arc": "Wano",
+  "img": ""
+  },
+  {
+  "name": "Queen",
+  "gender": "Male",
+  "height": 595,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 1320000000,
+  "affil": "Pirate",
+  "arc": "Wano",
+  "img": ""
+  },
+  {
+  "name": "Jack",
+  "gender": "Male",
+  "height": 830,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 1000000000,
+  "affil": "Pirate",
+  "arc": "Zou",
+  "img": ""
+  },
+  {
+  "name": "Marco",
+  "gender": "Male",
+  "height": 203,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 1374000000,
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Portgas D. Ace",
+  "gender": "Male",
+  "height": 185,
+  "haki": "OAC",
+  "fruit": "Logia",
+  "bounty": 550000000,
+  "affil": "Pirate",
+  "arc": "Drum Island",
+  "img": ""
+  },
+  {
+  "name": "Jozu",
+  "gender": "Male",
+  "height": 503,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Shiryu",
+  "gender": "Male",
+  "height": 340,
+  "haki": "A",
+  "fruit": "Paramecia",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Impel Down",
+  "img": ""
+  },
+  {
+  "name": "Jesus Burgess",
+  "gender": "Male",
+  "height": 355,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Van Augur",
+  "gender": "Male",
+  "height": 340,
+  "haki": "O",
+  "fruit": "Paramecia",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Dracule Mihawk",
+  "gender": "Male",
+  "height": 198,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 3590000000,
+  "affil": "Pirate",
+  "arc": "Baratie",
+  "img": ""
+  },
+  {
+  "name": "Crocodile",
+  "gender": "Male",
+  "height": 253,
+  "haki": "OA",
+  "fruit": "Logia",
+  "bounty": 1965000000,
+  "affil": "Pirate",
+  "arc": "Alabasta",
+  "img": ""
+  },
+  {
+  "name": "Galdino (Mr. 3)",
+  "gender": "Male",
+  "height": 179,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 24000000,
+  "affil": "Pirate",
+  "arc": "Little Garden",
+  "img": ""
+  },
+  {
+  "name": "Donquixote Doflamingo",
+  "gender": "Male",
+  "height": 305,
+  "haki": "OAC",
+  "fruit": "Paramecia",
+  "bounty": 340000000,
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Bartholomew Kuma",
+  "gender": "Male",
+  "height": 689,
+  "haki": "A",
+  "fruit": "Paramecia",
+  "bounty": 296000000,
+  "affil": "Other",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Gecko Moria",
+  "gender": "Male",
+  "height": 692,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 320000000,
+  "affil": "Pirate",
+  "arc": "Thriller Bark",
+  "img": ""
+  },
+  {
+  "name": "Boa Hancock",
+  "gender": "Female",
+  "height": 191,
+  "haki": "OAC",
+  "fruit": "Paramecia",
+  "bounty": 1659000000,
+  "affil": "Pirate",
+  "arc": "Amazon Lily",
+  "img": ""
+  },
+  {
+  "name": "Trafalgar Law",
+  "gender": "Male",
+  "height": 191,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": 3000000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Edward Weevil",
+  "gender": "Male",
+  "height": 680,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 480000000,
+  "affil": "Pirate",
+  "arc": "Zou",
+  "img": ""
+  },
+  {
+  "name": "Sakazuki (Akainu)",
+  "gender": "Male",
+  "height": 306,
+  "haki": "OA",
+  "fruit": "Logia",
+  "bounty": 5000000000,
+  "affil": "Government",
+  "arc": "Enies Lobby",
+  "img": ""
+  },
+  {
+  "name": "Kuzan (Aokiji)",
+  "gender": "Male",
+  "height": 298,
+  "haki": "OA",
+  "fruit": "Logia",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Long Ring Long Land",
+  "img": ""
+  },
+  {
+  "name": "Borsalino (Kizaru)",
+  "gender": "Male",
+  "height": 302,
+  "haki": "OA",
+  "fruit": "Logia",
+  "bounty": 3000000000,
+  "affil": "Government",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Issho (Fujitora)",
+  "gender": "Male",
+  "height": 270,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": 3000000000,
+  "affil": "Government",
+  "arc": "Dressrosa",
+  "img": ""
+  },
+  {
+  "name": "Aramaki (Ryokugyu)",
+  "gender": "Male",
+  "height": 308,
+  "haki": "OA",
+  "fruit": "Logia",
+  "bounty": 3000000000,
+  "affil": "Government",
+  "arc": "Levely",
+  "img": ""
+  },
+  {
+  "name": "Sengoku",
+  "gender": "Male",
+  "height": 278,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 3000000000,
+  "affil": "Government",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Monkey D. Garp",
+  "gender": "Male",
+  "height": 287,
+  "haki": "OAC",
+  "fruit": "None",
+  "bounty": 3000000000,
+  "affil": "Government",
+  "arc": "Post-Enies Lobby",
+  "img": ""
+  },
+  {
+  "name": "Koby",
+  "gender": "Male",
+  "height": 167,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 500000000,
+  "affil": "Government",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Smoker",
+  "gender": "Male",
+  "height": 209,
+  "haki": "OA",
+  "fruit": "Logia",
+  "bounty": 800000000,
+  "affil": "Government",
+  "arc": "Loguetown",
+  "img": ""
+  },
+  {
+  "name": "Tashigi",
+  "gender": "Female",
+  "height": 170,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 200000000,
+  "affil": "Government",
+  "arc": "Loguetown",
+  "img": ""
+  },
+  {
+  "name": "Helmeppo",
+  "gender": "Male",
+  "height": 179,
+  "haki": "O",
+  "fruit": "None",
+  "bounty": 100000000,
+  "affil": "Government",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Rob Lucci",
+  "gender": "Male",
+  "height": 212,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 0,
+  "affil": "Government",
+  "arc": "Water 7",
+  "img": ""
+  },
+  {
+  "name": "Kaku",
+  "gender": "Male",
+  "height": 191,
+  "haki": "A",
+  "fruit": "Zoan",
+  "bounty": 0,
+  "affil": "Government",
+  "arc": "Water 7",
+  "img": ""
+  },
+  {
+  "name": "Tsuru",
+  "gender": "Female",
+  "height": 204,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": 1000000000,
+  "affil": "Government",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Jaygarcia Saturn",
+  "gender": "Male",
+  "height": 249,
+  "haki": "OAC",
+  "fruit": "Zoan",
+  "bounty": 0,
+  "affil": "Government",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Vegapunk",
+  "gender": "Male",
+  "height": 314,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 0,
+  "affil": "Government",
+  "arc": "Egghead",
+  "img": ""
+  },
+  {
+  "name": "Magellan",
+  "gender": "Male",
+  "height": 318,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 0,
+  "affil": "Government",
+  "arc": "Impel Down",
+  "img": ""
+  },
+  {
+  "name": "Sentomaru",
+  "gender": "Male",
+  "height": 330,
+  "haki": "A",
+  "fruit": "None",
+  "bounty": 300000000,
+  "affil": "Government",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Monkey D. Dragon",
+  "gender": "Male",
+  "height": 256,
+  "haki": "",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Other",
+  "arc": "Loguetown",
+  "img": ""
+  },
+  {
+  "name": "Sabo",
+  "gender": "Male",
+  "height": 187,
+  "haki": "OA",
+  "fruit": "Logia",
+  "bounty": 602000000,
+  "affil": "Other",
+  "arc": "Post-War",
+  "img": ""
+  },
+  {
+  "name": "Emporio Ivankov",
+  "gender": "Male",
+  "height": 449,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": "Unknown",
+  "affil": "Other",
+  "arc": "Impel Down",
+  "img": ""
+  },
+  {
+  "name": "Koala",
+  "gender": "Female",
+  "height": 160,
+  "haki": "",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Other",
+  "arc": "Fish-Man Island",
+  "img": ""
+  },
+  {
+  "name": "Eustass Kid",
+  "gender": "Male",
+  "height": 205,
+  "haki": "OAC",
+  "fruit": "Paramecia",
+  "bounty": 3000000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Killer",
+  "gender": "Male",
+  "height": 195,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 200000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Basil Hawkins",
+  "gender": "Male",
+  "height": 210,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 320000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "X Drake",
+  "gender": "Male",
+  "height": 233,
+  "haki": "OA",
+  "fruit": "Zoan",
+  "bounty": 222000000,
+  "affil": "Both",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Scratchmen Apoo",
+  "gender": "Male",
+  "height": 330,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": 350000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Jewelry Bonney",
+  "gender": "Female",
+  "height": 174,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 320000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Capone Bege",
+  "gender": "Male",
+  "height": 166,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 350000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Urouge",
+  "gender": "Male",
+  "height": 388,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 108000000,
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Gol D. Roger",
+  "gender": "Male",
+  "height": 274,
+  "haki": "OAC",
+  "fruit": "None",
+  "bounty": 5564800000,
+  "affil": "Pirate",
+  "arc": "Romance Dawn",
+  "img": ""
+  },
+  {
+  "name": "Silvers Rayleigh",
+  "gender": "Male",
+  "height": 188,
+  "haki": "OAC",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Sabaody",
+  "img": ""
+  },
+  {
+  "name": "Kuro",
+  "gender": "Male",
+  "height": 220,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 16000000,
+  "affil": "Pirate",
+  "arc": "Syrup Village",
+  "img": ""
+  },
+  {
+  "name": "Don Krieg",
+  "gender": "Male",
+  "height": 245,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 17000000,
+  "affil": "Pirate",
+  "arc": "Baratie",
+  "img": ""
+  },
+  {
+  "name": "Arlong",
+  "gender": "Male",
+  "height": 263,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 20000000,
+  "affil": "Pirate",
+  "arc": "Arlong Park",
+  "img": ""
+  },
+  {
+  "name": "Enel",
+  "gender": "Male",
+  "height": 266,
+  "haki": "O",
+  "fruit": "Logia",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Skypiea",
+  "img": ""
+  },
+  {
+  "name": "Caesar Clown",
+  "gender": "Male",
+  "height": 305,
+  "haki": "",
+  "fruit": "Logia",
+  "bounty": 300000000,
+  "affil": "Other",
+  "arc": "Punk Hazard",
+  "img": ""
+  },
+  {
+  "name": "Hody Jones",
+  "gender": "Male",
+  "height": 205,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 0,
+  "affil": "Pirate",
+  "arc": "Fish-Man Island",
+  "img": ""
+  },
+  {
+  "name": "Wapol",
+  "gender": "Male",
+  "height": 208,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Drum Island",
+  "img": ""
+  },
+  {
+  "name": "Nefertari Vivi",
+  "gender": "Female",
+  "height": 169,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Whisky Peak",
+  "img": ""
+  },
+  {
+  "name": "Bentham (Mr. 2 Bon Clay)",
+  "gender": "Male",
+  "height": 211,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 32000000,
+  "affil": "Other",
+  "arc": "Alabasta",
+  "img": ""
+  },
+  {
+  "name": "Iceburg",
+  "gender": "Male",
+  "height": 199,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Water 7",
+  "img": ""
+  },
+  {
+  "name": "Perona",
+  "gender": "Female",
+  "height": 160,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 0,
+  "affil": "Pirate",
+  "arc": "Thriller Bark",
+  "img": ""
+  },
+  {
+  "name": "Fisher Tiger",
+  "gender": "Male",
+  "height": 520,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 230000000,
+  "affil": "Pirate",
+  "arc": "Fish-Man Island",
+  "img": ""
+  },
+  {
+  "name": "Shirahoshi",
+  "gender": "Female",
+  "height": 1112,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Fish-Man Island",
+  "img": ""
+  },
+  {
+  "name": "Kin'emon",
+  "gender": "Male",
+  "height": 202,
+  "haki": "A",
+  "fruit": "Paramecia",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Punk Hazard",
+  "img": ""
+  },
+  {
+  "name": "Kozuki Momonosuke",
+  "gender": "Male",
+  "height": 322,
+  "haki": "",
+  "fruit": "Zoan",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Punk Hazard",
+  "img": ""
+  },
+  {
+  "name": "Bartolomeo",
+  "gender": "Male",
+  "height": 225,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 200000000,
+  "affil": "Pirate",
+  "arc": "Dressrosa",
+  "img": ""
+  },
+  {
+  "name": "Cavendish",
+  "gender": "Male",
+  "height": 211,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 330000000,
+  "affil": "Pirate",
+  "arc": "Dressrosa",
+  "img": ""
+  },
+  {
+  "name": "Hajrudin",
+  "gender": "Male",
+  "height": 2200,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Dressrosa",
+  "img": ""
+  },
+  {
+  "name": "Bellamy",
+  "gender": "Male",
+  "height": 240,
+  "haki": "OA",
+  "fruit": "Paramecia",
+  "bounty": 195000000,
+  "affil": "Pirate",
+  "arc": "Jaya",
+  "img": ""
+  },
+  {
+  "name": "Carrot",
+  "gender": "Female",
+  "height": 160,
+  "haki": "O",
+  "fruit": "None",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Zou",
+  "img": ""
+  },
+  {
+  "name": "Inuarashi",
+  "gender": "Male",
+  "height": 511,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Zou",
+  "img": ""
+  },
+  {
+  "name": "Nekomamushi",
+  "gender": "Male",
+  "height": 522,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Zou",
+  "img": ""
+  },
+  {
+  "name": "Charlotte Pudding",
+  "gender": "Female",
+  "height": 166,
+  "haki": "",
+  "fruit": "Paramecia",
+  "bounty": 0,
+  "affil": "Pirate",
+  "arc": "Whole Cake Island",
+  "img": ""
+  },
+  {
+  "name": "Yamato",
+  "gender": "Male",
+  "height": 263,
+  "haki": "OAC",
+  "fruit": "Zoan",
+  "bounty": 0,
+  "affil": "Other",
+  "arc": "Wano",
+  "img": ""
+  },
+  {
+  "name": "Kozuki Oden",
+  "gender": "Male",
+  "height": 382,
+  "haki": "OA",
+  "fruit": "None",
+  "bounty": "Unknown",
+  "affil": "Pirate",
+  "arc": "Wano",
+  "img": ""
+  },
+  {
+  "name": "Dorry",
+  "gender": "Male",
+  "height": 2260,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 1800000000,
+  "affil": "Pirate",
+  "arc": "Little Garden",
+  "img": ""
+  },
+  {
+  "name": "Brogy",
+  "gender": "Male",
+  "height": 2130,
+  "haki": "",
+  "fruit": "None",
+  "bounty": 1800000000,
+  "affil": "Pirate",
+  "arc": "Little Garden",
+  "img": ""
+  },
+  {
+  "name": "Loki",
+  "gender": "Male",
+  "height": 6700,
+  "haki": "",
+  "fruit": "Zoan",
+  "bounty": 2600000000,
+  "affil": "Other",
+  "arc": "Elbaf",
+  "img": ""
+  }
+  ];
+
+const MAX_GUESSES = 8, HEIGHT_NEAR = 15;
+const START = Date.UTC(2026, 9, 1); // puzzle #1 = 1 October 2026
+
+function seededOrder(n, seed) {
+  const a = [...Array(n).keys()];
+  let s = seed;
+  for (let i = n - 1; i > 0; i--) { s = (s * 1103515245 + 12345) % 2147483648; const j = s % (i + 1); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+const ORDER = seededOrder(CHARACTERS.length, 4242);
+function todayNo() {
+  const now = new Date();
+  return Math.max(1, Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - START) / 86400000) + 1);
+}
+const TODAY = todayNo();
+const answerFor = n => CHARACTERS[ORDER[(n - 1) % CHARACTERS.length]];
+const dateFor = n => new Date(START + (n - 1) * 86400000).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+const pKey = n => "wt-op3-p" + n;
+const loadGuesses = n => store.get(pKey(n), []).filter(x => CHARACTERS.some(c => c.name === x));
+let stats = store.get("wt-op3-stats", { played: 0, wins: 0, streak: 0, best: 0, lastWin: -1, dist: [0,0,0,0,0,0,0,0], done: [] });
+
+// ---------- Clue logic ----------
+const bountyVal = b => b === "Unknown" ? 0 : b;
+function fmtBounty(b) {
+  if (b === "Unknown") return "Unknown";
+  if (b === 0) return "None";
+  if (b >= 1e9) return (b % 1e9 === 0 ? String(b / 1e9) : (b / 1e9).toFixed(2).replace(/0$/, "")) + "B";
+  if (b >= 1e6) return (b % 1e6 === 0 ? String(b / 1e6) : (b / 1e6).toFixed(1)) + "M";
+  return b.toLocaleString("en-GB");
+}
+const arrow = (mine, target) => target > mine ? "↑" : target < mine ? "↓" : "";
+const fruitSet = f => f === "None" ? [] : f.split("+");
+const sameSet = (a, b) => a.length === b.length && a.every(x => b.includes(x));
+
+function compare(g, a) {
+  const hDiff = Math.abs(g.height - a.height);
+  const gH = g.haki.split(""), aH = a.haki.split("");
+  const gF = fruitSet(g.fruit), aF = fruitSet(a.fruit);
+  const gB = bountyVal(g.bounty), aB = bountyVal(a.bounty);
+  const bountyC = g.bounty === a.bounty ? "g" : (gB === 0 && aB === 0) ? "y" : "r";
+  const yellowAffil = (g.affil === "Both" && ["Pirate","Government"].includes(a.affil)) || (a.affil === "Both" && ["Pirate","Government"].includes(g.affil));
+  const gi = arcIndex(g.arc), ai = arcIndex(a.arc);
+  return [
+    { c: g.gender === a.gender ? "g" : "r", t: g.gender },
+    { c: hDiff === 0 ? "g" : hDiff <= HEIGHT_NEAR ? "y" : "r", t: g.height + " cm", a: arrow(g.height, a.height) },
+    { c: sameSet(gH, aH) ? "g" : gH.some(x => aH.includes(x)) ? "y" : "r", t: g.haki ? gH.join(" ") : "None" },
+    { c: sameSet(gF, aF) ? "g" : (gF.length && aF.length) ? "y" : "r", t: gF.length ? gF.join(" + ") : "None" },
+    { c: bountyC, t: fmtBounty(g.bounty), a: bountyC === "g" ? "" : arrow(gB, aB) },
+    { c: g.affil === a.affil ? "g" : yellowAffil ? "y" : "r", t: g.affil === "Government" ? "Gov't" : g.affil },
+    { c: gi === ai ? "g" : ARCS[gi][1] === ARCS[ai][1] ? "y" : "r", t: g.arc, a: arrow(gi, ai) },
+  ];
+}
+
+// ---------- Shared bits ----------
+const $ = id => document.getElementById(id);
+const byName = n => CHARACTERS.find(c => c.name === n);
+function portrait(c) {
+  const box = document.createElement("span");
+  box.className = "pic";
+  const initials = c.name.replace(/\(.*\)/, "").replace(/ D\./, "").trim().split(/\s+/).map(w => w[0]).slice(0, 2).join("");
+  if (c.img) {
+    const img = document.createElement("img");
+    img.alt = ""; img.src = c.img; img.loading = "lazy";
+    img.onerror = () => { box.textContent = initials; };
+    box.appendChild(img);
+  } else box.textContent = initials;
+  return box;
+}
+
+// ---------- Game ----------
+const game = { mode: "daily", n: TODAY, answer: answerFor(TODAY), guesses: [] };
+const board = $("board"), input = $("guess"), suggest = $("suggest");
+let activeIdx = 0;
+const won = () => game.guesses.includes(game.answer.name);
+const over = () => won() || game.guesses.length >= MAX_GUESSES;
+
+function renderGuess(name, animate) {
+  const g = byName(name);
+  const wrap = document.createElement("div");
+  wrap.className = "guess";
+  const who = document.createElement("div");
+  who.className = "who" + (g.name === game.answer.name ? " correct" : "");
+  const label = document.createElement("span");
+  label.textContent = g.name;
+  who.append(portrait(g), label);
+  const row = document.createElement("div");
+  row.className = "cols";
+  for (const cell of compare(g, game.answer)) {
+    const t = document.createElement("div");
+    t.className = "tile " + cell.c;
+    if (!animate) t.style.animation = "none";
+    const v = document.createElement("span"); v.textContent = cell.t; t.appendChild(v);
+    if (cell.a) { const s = document.createElement("span"); s.className = "arrow"; s.textContent = cell.a; t.appendChild(s); }
+    row.appendChild(t);
+  }
+  wrap.append(who, row);
+  $("empty").hidden = true;
+  board.appendChild(wrap);
+}
+
+function shareText() {
+  const map = { g: "🟩", y: "🟨", r: "🟥" };
+  const rows = game.guesses.map(n => compare(byName(n), game.answer).map(x => map[x.c]).join(""));
+  const label = game.mode === "test" ? "Test" : "#" + game.n;
+  return `Who's That? One Piece ${label} ${won() ? game.guesses.length : "X"}/${MAX_GUESSES}\n` + rows.join("\n");
+}
+
+function renderResult() {
+  const box = $("result");
+  if (!over()) { box.hidden = true; $("searchBox").hidden = false; return; }
+  $("searchBox").hidden = true;
+  box.hidden = false; box.innerHTML = "";
+  const h = document.createElement("h3");
+  h.textContent = won() ? "Bounty claimed!" : "Got away this time";
+  const p = document.createElement("p");
+  p.innerHTML = won()
+    ? `It was <b></b>, found in ${game.guesses.length} ${game.guesses.length === 1 ? "guess" : "guesses"}.`
+    : `The character was <b></b>.` + (game.mode === "daily" ? " A new one sets sail tomorrow." : "");
+  p.querySelector("b").textContent = game.answer.name;
+  const pre = document.createElement("div");
+  pre.className = "grid-preview";
+  pre.textContent = shareText().split("\n").slice(1).join("\n");
+  const actions = document.createElement("div");
+  actions.className = "row-actions";
+  const btn = document.createElement("button");
+  btn.type = "button"; btn.textContent = "Copy result";
+  const toast = document.createElement("div"); toast.className = "toast";
+  btn.addEventListener("click", () => {
+    const fail = () => { toast.textContent = "Couldn't copy. Select the grid above instead."; };
+    if (!navigator.clipboard) return fail();
+    navigator.clipboard.writeText(shareText()).then(() => { toast.textContent = "Copied. Paste it in the group chat."; }, fail);
+  });
+  actions.appendChild(btn);
+  if (game.mode === "archive") {
+    const next = nextUnplayed(game.n);
+    const a = document.createElement("a"); a.className = "btn ghost";
+    if (next) { a.href = "#archive-" + next; a.textContent = "Next unplayed →"; } else { a.href = "#archive"; a.textContent = "Back to archive"; }
+    actions.appendChild(a);
+  }
+  box.append(portrait(game.answer), h, p, pre, actions, toast);
+}
+
+function updateLeft() {
+  const n = MAX_GUESSES - game.guesses.length;
+  $("left").textContent = n + (n === 1 ? " guess left" : " guesses left");
+}
+
+function recordDaily() {
+  if (game.mode !== "daily" || stats.done.includes(game.n)) return;
+  stats.done.push(game.n);
+  stats.played++;
+  if (won()) {
+    stats.wins++;
+    stats.dist[game.guesses.length - 1]++;
+    stats.streak = stats.lastWin === game.n - 1 ? stats.streak + 1 : 1;
+    stats.lastWin = game.n;
+    stats.best = Math.max(stats.best, stats.streak);
+  } else stats.streak = 0;
+  store.set("wt-op3-stats", stats);
+  refreshHeader();
+}
+
+function submit(name) {
+  if (over()) return;
+  const c = CHARACTERS.find(x => x.name.toLowerCase() === name.toLowerCase());
+  if (!c || game.guesses.includes(c.name)) return;
+  game.guesses.push(c.name);
+  if (game.mode !== "test") store.set(pKey(game.n), game.guesses);
+  renderGuess(c.name, true);
+  input.value = ""; hideSuggest(); updateLeft();
+  if (over()) recordDaily();
+  renderResult();
+  if (!over()) input.focus();
+}
+
+function startGame(mode, n) {
+  game.mode = mode; game.n = n;
+  game.answer = mode === "test" ? CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)] : answerFor(n);
+  game.guesses = mode === "test" ? [] : loadGuesses(n);
+  board.querySelectorAll(".guess").forEach(el => el.remove());
+  $("empty").hidden = game.guesses.length > 0;
+  $("gameTitle").textContent = mode === "test" ? "Test mode" : `Puzzle #${n}`;
+  const banner = $("gameBanner");
+  banner.hidden = mode !== "archive";
+  if (mode === "archive") banner.textContent = `You're playing Puzzle #${n} from ${dateFor(n)}. Archive games don't affect your streak.`;
+  game.guesses.forEach(x => renderGuess(x, false));
+  updateLeft(); renderResult();
+}
+
+function matches() {
+  const q = input.value.trim().toLowerCase();
+  if (!q) return [];
+  return CHARACTERS.filter(c => !game.guesses.includes(c.name) && c.name.toLowerCase().includes(q)).slice(0, 7);
+}
+function hideSuggest() { suggest.hidden = true; suggest.innerHTML = ""; }
+function showSuggest() {
+  const list = matches();
+  suggest.innerHTML = "";
+  if (!list.length) return hideSuggest();
+  activeIdx = Math.min(activeIdx, list.length - 1);
+  list.forEach((c, i) => {
+    const li = document.createElement("li");
+    const label = document.createElement("span"); label.textContent = c.name;
+    li.append(portrait(c), label);
+    if (i === activeIdx) li.className = "active";
+    li.addEventListener("mousedown", e => { e.preventDefault(); submit(c.name); });
+    suggest.appendChild(li);
+  });
+  suggest.hidden = false;
+}
+input.addEventListener("input", () => { activeIdx = 0; showSuggest(); });
+input.addEventListener("blur", () => setTimeout(hideSuggest, 100));
+input.addEventListener("keydown", e => {
+  const list = matches();
+  if (e.key === "ArrowDown") { e.preventDefault(); activeIdx = Math.min(activeIdx + 1, list.length - 1); showSuggest(); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); activeIdx = Math.max(activeIdx - 1, 0); showSuggest(); }
+  else if (e.key === "Enter") { e.preventDefault(); if (list[activeIdx]) submit(list[activeIdx].name); }
+  else if (e.key === "Escape") hideSuggest();
+});
+$("go").addEventListener("click", () => { const list = matches(); if (list[activeIdx]) submit(list[activeIdx].name); });
+
+// ---------- Archive ----------
+function puzzleState(n) {
+  const g = loadGuesses(n);
+  const a = answerFor(n);
+  if (g.includes(a.name)) return { s: "won", label: `✅ Solved in ${g.length}` };
+  if (g.length >= MAX_GUESSES) return { s: "lost", label: "❌ Missed" };
+  if (g.length) return { s: "open", label: `▶️ ${g.length} guessed` };
+  return { s: "open", label: "▶️ Not played" };
+}
+function nextUnplayed(from) {
+  for (let n = from - 1; n >= 1; n--) if (puzzleState(n).s === "open") return n;
+  return 0;
+}
+let archiveFilter = "all";
+function renderArchive() {
+  const cards = $("cards");
+  cards.innerHTML = "";
+  let shown = 0;
+  for (let n = TODAY - 1; n >= 1; n--) {
+    const st = puzzleState(n);
+    if (archiveFilter !== "all" && st.s !== archiveFilter) continue;
+    const a = document.createElement("a");
+    a.className = "card"; a.href = "#archive-" + n;
+    a.innerHTML = `<span class="num"></span><span class="date"></span><span class="st"></span>`;
+    a.querySelector(".num").textContent = "#" + n;
+    a.querySelector(".date").textContent = dateFor(n);
+    const s = a.querySelector(".st"); s.textContent = st.label; s.classList.add(st.s);
+    cards.appendChild(a); shown++;
+  }
+  $("archiveEmpty").hidden = shown > 0;
+  if (TODAY === 1) $("archiveEmpty").textContent = "No past puzzles yet. Come back tomorrow.";
+}
+document.querySelectorAll("[data-filter]").forEach(b => b.addEventListener("click", () => {
+  archiveFilter = b.dataset.filter;
+  document.querySelectorAll("[data-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  renderArchive();
+}));
+
+// ---------- Stats ----------
+const currentStreak = () => (stats.lastWin >= TODAY - 1) ? stats.streak : 0;
+
+// ---------- Home / header ----------
+function refreshHeader() {
+  $("todayNo").textContent = "#" + TODAY;
+  $("streak").textContent = currentStreak();
+  const g = loadGuesses(TODAY), a = answerFor(TODAY);
+  $("homeStatus").textContent = g.includes(a.name) ? `You solved today's puzzle in ${g.length}. Nice work.`
+    : g.length >= MAX_GUESSES ? "Today's character got away. Try the archive."
+    : g.length ? `You're ${g.length} ${g.length === 1 ? "guess" : "guesses"} in. Keep going.` : "";
+}
+function tick() {
+  const now = new Date();
+  const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const s = Math.max(0, Math.floor((next - now) / 1000));
+  const pad = n => String(n).padStart(2, "0");
+  $("countdown").textContent = `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s % 3600 / 60))}:${pad(s % 60)}`;
+  if (todayNo() !== TODAY) location.reload();
+}
+
+// ---------- Routing ----------
+function route() {
+  const h = location.hash.replace("#", "") || "home";
+  let view = h, navKey = h;
+  const m = h.match(/^archive-(\d+)$/);
+  if (h === "play") { view = "game"; startGame("daily", TODAY); }
+  else if (m && +m[1] >= 1 && +m[1] < TODAY) { view = "game"; navKey = "archive"; startGame("archive", +m[1]); }
+  else if (h === "archive") renderArchive();
+  else if (!["home","how"].includes(h)) { view = "home"; navKey = "home"; }
+  document.querySelectorAll("[data-view]").forEach(s => { s.hidden = s.dataset.view !== view; });
+  document.querySelectorAll("[data-nav]").forEach(a => {
+    if (a.dataset.nav === navKey) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  refreshHeader();
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+route();
+tick(); setInterval(tick, 1000);
+</script>
+
+</body>
+</html>
